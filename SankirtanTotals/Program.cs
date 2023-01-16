@@ -14,6 +14,7 @@ namespace SankirtanTotals
     {
         static void Main(string[] args)
         {
+            //CreateReport(new List<RowItem>());
             //Create COM Objects. Create a COM object for everything that is referenced
             Excel.Application xlApp = new Excel.Application();
             Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(@"E:\\Документы\\Распространение книг\\Totals.xlsx");
@@ -64,7 +65,28 @@ namespace SankirtanTotals
                 totalList.Add(totalItem);
             }
 
+            
             CreateReport(totalList);
+
+            //cleanup
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            //rule of thumb for releasing com objects:
+            //  never use two dots, all COM objects must be referenced and released individually
+            //  ex: [somthing].[something].[something] is bad
+
+            //release com objects to fully kill excel process from running in the background
+            Marshal.ReleaseComObject(xlRange5);
+            Marshal.ReleaseComObject(xlWorksheet5);
+
+            //close and release
+            xlWorkbook.Close();
+            Marshal.ReleaseComObject(xlWorkbook);
+
+            //quit and release
+            xlApp.Quit();
+            Marshal.ReleaseComObject(xlApp);
         }
 
         static RowItem FindRow(Excel._Worksheet worksheet, string fio)
@@ -196,11 +218,14 @@ namespace SankirtanTotals
                 xlWorkSheet.Cells[i, 7] = row.CCSets;
                 xlWorkSheet.Cells[i, 8] = row.Books;
                 xlWorkSheet.Cells[i, 9] = row.Points;
+                i++;
             }
 
 
 
-            xlWorkBook.SaveAs(@"E:\\Документы\\Распространение книг\\output.xlsx", Excel.XlFileFormat.xlWorkbookDefault, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+            xlWorkBook.SaveAs("E:\\test\\test505.xls", Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookDefault, Type.Missing, Type.Missing,
+        false, false, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange,
+        Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
             xlWorkBook.Close(true, misValue, misValue);
             xlApp.Quit();
 
