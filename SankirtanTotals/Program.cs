@@ -33,38 +33,43 @@ namespace SankirtanTotals
             foreach (var fio in fioList)
             {
                 var totalItem = new RowItem() { FIO = fio };
-                totalItem.H4 = FindRow(xlWorkbook.Sheets[1], fio).H4 + FindRow(xlWorkbook.Sheets[2], fio).H4
-                    + FindRow(xlWorkbook.Sheets[3], fio).H4 
-                    + FindRow(xlWorkbook.Sheets[4], fio).H4;
-                //+ FindRow(xlWorkbook.Sheets[5], fio).H4;
-                totalItem.H3 = FindRow(xlWorkbook.Sheets[1], fio).H3 + FindRow(xlWorkbook.Sheets[2], fio).H3
-                    + FindRow(xlWorkbook.Sheets[3], fio).H3 
-                    + FindRow(xlWorkbook.Sheets[4], fio).H3;
-                //+ FindRow(xlWorkbook.Sheets[5], fio).H3;
-                totalItem.S2 = FindRow(xlWorkbook.Sheets[1], fio).S2 + FindRow(xlWorkbook.Sheets[2], fio).S2
-                    + FindRow(xlWorkbook.Sheets[3], fio).S2 
-                    + FindRow(xlWorkbook.Sheets[4], fio).S2;
-                    //+ FindRow(xlWorkbook.Sheets[5], fio).S2;
-                totalItem.S1 = FindRow(xlWorkbook.Sheets[1], fio).S1 + FindRow(xlWorkbook.Sheets[2], fio).S1
-                   + FindRow(xlWorkbook.Sheets[3], fio).S1
-                   + FindRow(xlWorkbook.Sheets[4], fio).S1;
-                   //+ FindRow(xlWorkbook.Sheets[5], fio).S1;
-                totalItem.SBSets = FindRow(xlWorkbook.Sheets[1], fio).SBSets + FindRow(xlWorkbook.Sheets[2], fio).SBSets
-                   + FindRow(xlWorkbook.Sheets[3], fio).SBSets
-                   + FindRow(xlWorkbook.Sheets[4], fio).SBSets;
-                //+ FindRow(xlWorkbook.Sheets[5], fio).SBSets;
-                totalItem.CCSets = FindRow(xlWorkbook.Sheets[1], fio).CCSets + FindRow(xlWorkbook.Sheets[2], fio).CCSets
-                   + FindRow(xlWorkbook.Sheets[3], fio).CCSets 
-                   + FindRow(xlWorkbook.Sheets[4], fio).CCSets;
-                //+ FindRow(xlWorkbook.Sheets[5], fio).CCSets;
-                totalItem.Books = FindRow(xlWorkbook.Sheets[1], fio).Books + FindRow(xlWorkbook.Sheets[2], fio).Books
-                   + FindRow(xlWorkbook.Sheets[3], fio).Books 
-                   + FindRow(xlWorkbook.Sheets[4], fio).Books;
-                //+ FindRow(xlWorkbook.Sheets[5], fio).Books;
-                totalItem.Points = FindRow(xlWorkbook.Sheets[1], fio).Points + FindRow(xlWorkbook.Sheets[2], fio).Points
-                   + FindRow(xlWorkbook.Sheets[3], fio).Points 
-                   + FindRow(xlWorkbook.Sheets[4], fio).Points;
-                   //+ FindRow(xlWorkbook.Sheets[5], fio).Points;
+                var rowSheet1 = FindRow(xlWorkbook.Sheets[1], fio);
+                var rowSheet2 = FindRow(xlWorkbook.Sheets[2], fio);
+                var rowSheet3 = FindRow(xlWorkbook.Sheets[3], fio);
+                var rowSheet4 = FindRow(xlWorkbook.Sheets[4], fio);
+                
+                totalItem.H4 = rowSheet1.H4 
+                               + rowSheet2.H4 
+                               + rowSheet3.H4 
+                               + rowSheet4.H4;
+                totalItem.H3 = rowSheet1.H3 
+                               + rowSheet2.H3 
+                               + rowSheet3.H3 
+                               + rowSheet4.H3;
+                totalItem.S2 = rowSheet1.S2 
+                               + rowSheet2.S2
+                               + rowSheet3.S2 
+                               + rowSheet4.S2;
+                totalItem.S1 = rowSheet1.S1 
+                               + rowSheet2.S1 
+                               + rowSheet3.S1 
+                               + rowSheet4.S1;
+                totalItem.SBSets = rowSheet1.SBSets 
+                                   + rowSheet2.SBSets
+                                   + rowSheet3.SBSets
+                                   + rowSheet4.SBSets;
+                totalItem.CCSets = rowSheet1.CCSets 
+                                   + rowSheet2.CCSets
+                                   + rowSheet3.CCSets 
+                                   + rowSheet4.CCSets;
+                totalItem.Books = rowSheet1.Books 
+                                  + rowSheet2.Books
+                                  + rowSheet3.Books 
+                                  + rowSheet4.Books;
+                totalItem.Points = rowSheet1.Points 
+                                   + rowSheet2.Points 
+                                   + rowSheet3.Points 
+                                   + rowSheet4.Points;
 
                 Console.WriteLine($"{totalItem.FIO} {totalItem.H4} {totalItem.H3} {totalItem.S2} {totalItem.S1} {totalItem.SBSets} {totalItem.CCSets} {totalItem.Books} {totalItem.Points}");
                 totalList.Add(totalItem);
@@ -245,8 +250,8 @@ namespace SankirtanTotals
 
 
 
-            xlWorkBook.SaveAs(@"E:\test\test2023.xls", 
-                Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookDefault, 
+            xlWorkBook.SaveAs(@"E:\test\test2023.xlsx", 
+                Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook, 
                 Type.Missing, Type.Missing,
         false, false, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange,
         Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
