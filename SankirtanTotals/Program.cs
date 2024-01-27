@@ -17,56 +17,60 @@ namespace SankirtanTotals
             //CreateReport(new List<RowItem>());
             //Create COM Objects. Create a COM object for everything that is referenced
             Excel.Application xlApp = new Excel.Application();
-            Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(@"E:\\Документы\\Распространение книг\\Totals.xlsx");
-            Excel._Worksheet xlWorksheet5 = xlWorkbook.Sheets[5];
-            Excel.Range xlRange5 = xlWorksheet5.UsedRange;
+            Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(@"E:\\Документы\\Распространение книг\\2023\\Totals.xlsx");
+            var sheetsCount = xlWorkbook.Sheets.Count;
+            
+            List<string> allFioList = new List<string>();
 
-            int rowCount = xlRange5.Rows.Count;
-            int colCount = xlRange5.Columns.Count;
-
-            List<string> fioList = new List<string>();
-
-            for (int i = 1; i <= rowCount; i++)
+            for (int i = 1; i <= sheetsCount; i++)
             {
-                if (xlRange5.Cells[i, 1] != null && xlRange5.Cells[i, 1].Value2 != null)
-                    fioList.Add(xlRange5.Cells[i, 1].Value2.ToString());
+                allFioList.AddRange(GetWorkSheetNames(xlWorkbook.Sheets[i]));
             }
+
+            var fioList = allFioList.Distinct().ToList();
 
             List<RowItem> totalList = new List<RowItem>();
             foreach (var fio in fioList)
             {
                 var totalItem = new RowItem() { FIO = fio };
                 totalItem.H4 = FindRow(xlWorkbook.Sheets[1], fio).H4 + FindRow(xlWorkbook.Sheets[2], fio).H4
-                    + FindRow(xlWorkbook.Sheets[3], fio).H4 + FindRow(xlWorkbook.Sheets[4], fio).H4
-                    + FindRow(xlWorkbook.Sheets[5], fio).H4;
+                    + FindRow(xlWorkbook.Sheets[3], fio).H4 
+                    + FindRow(xlWorkbook.Sheets[4], fio).H4;
+                //+ FindRow(xlWorkbook.Sheets[5], fio).H4;
                 totalItem.H3 = FindRow(xlWorkbook.Sheets[1], fio).H3 + FindRow(xlWorkbook.Sheets[2], fio).H3
-                    + FindRow(xlWorkbook.Sheets[3], fio).H3 + FindRow(xlWorkbook.Sheets[4], fio).H3
-                    + FindRow(xlWorkbook.Sheets[5], fio).H3;
+                    + FindRow(xlWorkbook.Sheets[3], fio).H3 
+                    + FindRow(xlWorkbook.Sheets[4], fio).H3;
+                //+ FindRow(xlWorkbook.Sheets[5], fio).H3;
                 totalItem.S2 = FindRow(xlWorkbook.Sheets[1], fio).S2 + FindRow(xlWorkbook.Sheets[2], fio).S2
-                    + FindRow(xlWorkbook.Sheets[3], fio).S2 + FindRow(xlWorkbook.Sheets[4], fio).S2
-                    + FindRow(xlWorkbook.Sheets[5], fio).S2;
+                    + FindRow(xlWorkbook.Sheets[3], fio).S2 
+                    + FindRow(xlWorkbook.Sheets[4], fio).S2;
+                    //+ FindRow(xlWorkbook.Sheets[5], fio).S2;
                 totalItem.S1 = FindRow(xlWorkbook.Sheets[1], fio).S1 + FindRow(xlWorkbook.Sheets[2], fio).S1
-                   + FindRow(xlWorkbook.Sheets[3], fio).S1 + FindRow(xlWorkbook.Sheets[4], fio).S1
-                   + FindRow(xlWorkbook.Sheets[5], fio).S1;
+                   + FindRow(xlWorkbook.Sheets[3], fio).S1
+                   + FindRow(xlWorkbook.Sheets[4], fio).S1;
+                   //+ FindRow(xlWorkbook.Sheets[5], fio).S1;
                 totalItem.SBSets = FindRow(xlWorkbook.Sheets[1], fio).SBSets + FindRow(xlWorkbook.Sheets[2], fio).SBSets
-                   + FindRow(xlWorkbook.Sheets[3], fio).SBSets + FindRow(xlWorkbook.Sheets[4], fio).SBSets
-                   + FindRow(xlWorkbook.Sheets[5], fio).SBSets;
+                   + FindRow(xlWorkbook.Sheets[3], fio).SBSets
+                   + FindRow(xlWorkbook.Sheets[4], fio).SBSets;
+                //+ FindRow(xlWorkbook.Sheets[5], fio).SBSets;
                 totalItem.CCSets = FindRow(xlWorkbook.Sheets[1], fio).CCSets + FindRow(xlWorkbook.Sheets[2], fio).CCSets
-                   + FindRow(xlWorkbook.Sheets[3], fio).CCSets + FindRow(xlWorkbook.Sheets[4], fio).CCSets
-                   + FindRow(xlWorkbook.Sheets[5], fio).CCSets;
+                   + FindRow(xlWorkbook.Sheets[3], fio).CCSets 
+                   + FindRow(xlWorkbook.Sheets[4], fio).CCSets;
+                //+ FindRow(xlWorkbook.Sheets[5], fio).CCSets;
                 totalItem.Books = FindRow(xlWorkbook.Sheets[1], fio).Books + FindRow(xlWorkbook.Sheets[2], fio).Books
-                   + FindRow(xlWorkbook.Sheets[3], fio).Books + FindRow(xlWorkbook.Sheets[4], fio).Books
-                   + FindRow(xlWorkbook.Sheets[5], fio).Books;
+                   + FindRow(xlWorkbook.Sheets[3], fio).Books 
+                   + FindRow(xlWorkbook.Sheets[4], fio).Books;
+                //+ FindRow(xlWorkbook.Sheets[5], fio).Books;
                 totalItem.Points = FindRow(xlWorkbook.Sheets[1], fio).Points + FindRow(xlWorkbook.Sheets[2], fio).Points
-                   + FindRow(xlWorkbook.Sheets[3], fio).Points + FindRow(xlWorkbook.Sheets[4], fio).Points
-                   + FindRow(xlWorkbook.Sheets[5], fio).Points;
+                   + FindRow(xlWorkbook.Sheets[3], fio).Points 
+                   + FindRow(xlWorkbook.Sheets[4], fio).Points;
+                   //+ FindRow(xlWorkbook.Sheets[5], fio).Points;
 
                 Console.WriteLine($"{totalItem.FIO} {totalItem.H4} {totalItem.H3} {totalItem.S2} {totalItem.S1} {totalItem.SBSets} {totalItem.CCSets} {totalItem.Books} {totalItem.Points}");
                 totalList.Add(totalItem);
             }
 
-            
-            CreateReport(totalList);
+            totalList = totalList.OrderByDescending(t => t.Points).ToList();
 
             //cleanup
             GC.Collect();
@@ -77,9 +81,13 @@ namespace SankirtanTotals
             //  ex: [somthing].[something].[something] is bad
 
             //release com objects to fully kill excel process from running in the background
-            Marshal.ReleaseComObject(xlRange5);
-            Marshal.ReleaseComObject(xlWorksheet5);
+            //Marshal.ReleaseComObject(xlRange5);
+            //Marshal.ReleaseComObject(xlWorksheet5);
 
+            for (int i = 1; i <= sheetsCount; i++)
+            {
+                Marshal.ReleaseComObject(xlWorkbook.Sheets[i]);
+            }
             //close and release
             xlWorkbook.Close();
             Marshal.ReleaseComObject(xlWorkbook);
@@ -87,9 +95,22 @@ namespace SankirtanTotals
             //quit and release
             xlApp.Quit();
             Marshal.ReleaseComObject(xlApp);
+            CreateReport(totalList);
         }
 
-        static RowItem FindRow(Excel._Worksheet worksheet, string fio)
+        private static IEnumerable<string> GetWorkSheetNames(Worksheet worksheet)
+        {
+            Excel.Range xlRange = worksheet.UsedRange;
+            int rowCount = xlRange.Rows.Count;
+            for (int i = 1; i <= rowCount; i++)
+            {
+                if (xlRange.Cells[i, 1] != null && xlRange.Cells[i, 1].Value2 != null)
+                    yield return xlRange.Cells[i, 1].Value2.ToString();
+            }
+            Marshal.ReleaseComObject(xlRange);
+        }
+
+        private static RowItem FindRow(Excel._Worksheet worksheet, string fio)
         {
             Excel.Range xlRange = worksheet.UsedRange;
 
@@ -174,6 +195,7 @@ namespace SankirtanTotals
                     result.Points = 0; 
                 }
             }
+            Marshal.ReleaseComObject(xlRange);
             return result;
         }
 
@@ -223,7 +245,9 @@ namespace SankirtanTotals
 
 
 
-            xlWorkBook.SaveAs("E:\\test\\test505.xls", Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookDefault, Type.Missing, Type.Missing,
+            xlWorkBook.SaveAs(@"E:\test\test2023.xls", 
+                Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookDefault, 
+                Type.Missing, Type.Missing,
         false, false, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange,
         Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
             xlWorkBook.Close(true, misValue, misValue);
