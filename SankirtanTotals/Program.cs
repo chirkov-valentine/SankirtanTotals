@@ -17,7 +17,7 @@ namespace SankirtanTotals
             //CreateReport(new List<RowItem>());
             //Create COM Objects. Create a COM object for everything that is referenced
             Excel.Application xlApp = new Excel.Application();
-            Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(@"E:\\Документы\\Распространение книг\\2023\\Totals.xlsx");
+            Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(@"E:\\Документы\\Распространение книг\\2024\\Totals.xlsx");
             var sheetsCount = xlWorkbook.Sheets.Count;
             
             List<string> allFioList = new List<string>();
@@ -250,7 +250,7 @@ namespace SankirtanTotals
 
 
 
-            xlWorkBook.SaveAs(@"E:\test\test2023.xlsx", 
+            xlWorkBook.SaveAs(@"E:\Документы\Распространение книг\2024\Итоги2023.xlsx", 
                 Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook, 
                 Type.Missing, Type.Missing,
         false, false, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange,
